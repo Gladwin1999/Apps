@@ -3,44 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Mobile Homescreen</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="calculator-window">
-        <div class="window-controls">
-            <span class="control red"></span>
-            <span class="control yellow"></span>
-            <span class="control green"></span>
+    <div class="phone-container">
+        <div class="status-bar">
+            <span class="time" id="current-time">12:00</span>
+            <div class="status-icons">
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
         </div>
-        <div id="display" class="display"></div>
-        <div class="buttons-grid">
-            <button data-action="ac" class="light-gray">AC</button>
-            <button data-action="plus-minus" class="light-gray">+/-</button>
-            <button data-action="percent" class="light-gray">%</button>
-            <button data-operator="/" class="orange">÷</button>
-            
-            <button data-digit="7">7</button>
-            <button data-digit="8">8</button>
-            <button data-digit="9">9</button>
-            <button data-operator="*" class="orange">×</button>
-            
-            <button data-digit="4">4</button>
-            <button data-digit="5">5</button>
-            <button data-digit="6">6</button>
-            <button data-operator="-" class="orange">−</button>
-            
-            <button data-digit="1">1</button>
-            <button data-digit="2">2</button>
-            <button data-digit="3">3</button>
-            <button data-operator="+" class="orange">+</button>
-            
-            <button data-action="decimal" class="dark-gray">.</button>
-            <button data-digit="0">0</button>
-            <button data-action="delete">⌫</button>
-            <button data-action="equals" class="orange">=</button>
+
+        <div class="homescreen" id="homescreen">
+            <div class="app-grid">
+                <div class="app-item" data-app="calculator">
+                    <div class="app-icon icon-calc">🧮</div>
+                    <span class="app-label">Calculator</span>
+                </div>
+                <div class="app-item" data-app="notes">
+                    <div class="app-icon icon-notes">📝</div>
+                    <span class="app-label">Notes</span>
+                </div>
+                <div class="app-item" data-app="camera">
+                    <div class="app-icon icon-camera">📷</div>
+                    <span class="app-label">Camera</span>
+                </div>
+                <div class="app-item" data-app="settings">
+                    <div class="app-icon icon-settings">⚙️</div>
+                    <span class="app-label">Settings</span>
+                </div>
+                <div class="app-item" data-app="weather">
+                    <div class="app-icon icon-weather">☀️</div>
+                    <span class="app-label">Weather</span>
+                </div>
+                <div class="app-item" data-app="music">
+                    <div class="app-icon icon-music">🎵</div>
+                    <span class="app-label">Music</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- App View Overlay -->
+        <div id="app-overlay" class="hidden">
+            <div class="app-header">
+                <button id="back-button">←</button>
+                <h2 id="app-title">App</h2>
+            </div>
+            <div id="app-content" class="app-body">
+                <!-- Content dynamically injected -->
+            </div>
         </div>
     </div>
-    <script src="calculator.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
+```
