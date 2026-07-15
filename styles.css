@@ -1,95 +1,117 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.calculator-window {
-    width: 320px;
-    background: #000000;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 
-        0 25px 50px -12px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.window-controls {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-}
-
-.control {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.control.red { background: #ff5f57; }
-.control.yellow { background: #febc2e; }
-.control.green { background: #28c840; }
-
-.display {
-    width: 100%;
-    height: 60px;
-    margin-bottom: 16px;
-    text-align: right;
-    padding: 0 12px;
-    font-size: 52px;
-    color: #ffffff;
+    height: 100vh;
     overflow: hidden;
-    white-space: nowrap;
 }
 
-.buttons-grid {
+.phone-container {
+    width: 360px;
+    height: 740px;
+    background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+    border: 12px solid #333;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.status-bar {
+    height: 30px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.homescreen {
+    padding: 40px 20px;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    width: 100%;
 }
 
-button {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: none;
-    font-size: 30px;
+.app-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     cursor: pointer;
-    transition: all 0.1s ease;
+    transition: transform 0.1s ease;
 }
 
-button:hover {
-    filter: brightness(120%);
+.app-item:active {
+    transform: scale(0.9);
 }
 
-button:active {
-    transform: scale(0.95);
+.app-icon {
+    width: 65px;
+    height: 65px;
+    background-color: white;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.dark-gray {
-    background-color: #333333;
-    color: #ffffff;
+.app-label {
+    font-size: 12px;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
-.light-gray {
-    background-color: #a5a5a5;
-    color: #000000;
+/* App Overlay */
+#app-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
 }
 
-.orange {
-    background-color: #ff9f0a;
-    color: #ffffff;
+.hidden {
+    display: none !important;
 }
 
-button[data-operator] {
-    font-size: 36px;
+.app-header {
+    padding: 40px 20px 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+#back-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 15px;
+}
+
+.app-body {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    font-size: 16px;
 }
