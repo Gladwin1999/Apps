@@ -1,183 +1,103 @@
-class Calculator {
-    constructor() {
-        this.currentInput = '0';
-        this.previousInput = null;
-        this.operator = null;
-        this.waitingForNewNumber = false;
+const apps = {
+    calculator: {
+        title: "Calculator",
+        content: `
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                <button style="padding: 20px; font-size: 20px;">7</button>
+                <button style="padding: 20px; font-size: 20px;">8</button>
+                <button style="padding: 20px; font-size: 20px;">9</button>
+                <button style="padding: 20px; font-size: 20px; background: orange; color: white;">÷</button>
+                <button style="padding: 20px; font-size: 20px;">4</button>
+                <button style="padding: 20px; font-size: 20px;">5</button>
+                <button style="padding: 20px; font-size: 20px;">6</button>
+                <button style="padding: 20px; font-size: 20px; background: orange; color: white;">×</button>
+                <button style="padding: 20px; font-size: 20px;">1</button>
+                <button style="padding: 20px; font-size: 20px;">2</button>
+                <button style="padding: 20px; font-size: 20px;">3</button>
+                <button style="padding: 20px; font-size: 20px; background: orange; color: white;">-</button>
+                <button style="padding: 20px; font-size: 20px; grid-column: span 2;">0</button>
+                <button style="padding: 20px; font-size: 20px;">.</button>
+                <button style="padding: 20px; font-size: 20px; background: orange; color: white;">+</button>
+            </div>
+        `
+    },
+    notes: {
+        title: "Notes",
+        content: `
+            <textarea style="width: 100%; height: 80%; border: none; font-size: 16px; resize: none;" placeholder="Start typing your notes..."></textarea>
+        `
+    },
+    camera: {
+        title: "Camera",
+        content: `
+            <div style="width: 100%; height: 80%; background: #333; display: flex; align-items: center; justify-content: center; color: white;">
+                [ Camera Feed ]
+            </div>
+        `
+    },
+    settings: {
+        title: "Settings",
+        content: `
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div><label>Wi-Fi</label><p>Connected to Home_Network</p></div>
+                <div><label>Bluetooth</label><p>On</p></div>
+                <div><label>Brightness</label><input type="range"></div>
+            </div>
+        `
+    },
+    weather: {
+        title: "Weather",
+        content: `
+            <div style="text-align: center; padding: 40px;">
+                <h1>☀️ 75°F</h1>
+                <p>Sunny - San Francisco</p>
+            </div>
+        `
+    },
+    music: {
+        title: "Music",
+        content: `
+            <div style="text-align: center; padding: 40px;">
+                <div style="width: 150px; height: 150px; background: #ddd; border-radius: 50%; margin: 0 auto 20px;"></div>
+                <h2>Song Title</h2>
+                <p>Artist Name</p>
+                <button style="padding: 10px 30px; border-radius: 20px; background: #1DB954; color: white; border: none;">Play</button>
+            </div>
+        `
+    }
+};
+
+const appOverlay = document.getElementById('app-overlay');
+const appContent = document.getElementById('app-content');
+const appTitle = document.getElementById('app-title');
+const backButton = document.getElementById('back-button');
+const appItems = document.querySelectorAll('.app-item');
+
+appItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const appId = item.getAttribute('data-app');
+        const appData = apps[appId];
         
-        this.display = document.getElementById('display');
-        this.bindButtons();
-    }
-
-    bindButtons() {
-        document.querySelectorAll('[data-digit]').forEach(btn => {
-            btn.addEventListener('click', () => this.appendDigit(btn.dataset.digit));
-        });
-
-        document.querySelectorAll('[data-action]').forEach(btn => {
-            btn.addEventListener('click', () => this.handleAction(btn.dataset.action));
-        });
-
-        document.querySelectorAll('[data-operator]').forEach(btn => {
-            btn.addEventListener('click', () => this.setOperator(btn.dataset.operator));
-        });
-    }
-
-    appendDigit(digit) {
-        if (this.waitingForNewNumber) {
-            this.currentInput = digit;
-            this.waitingForNewNumber = false;
-        } else {
-            this.currentInput = this.currentInput === '0' ? digit : this.currentInput + digit;
-            
-            // Limit length to prevent overflow
-            if (this.currentInput.length > 9) {
-                this.currentInput = this.currentInput.slice(-9);
-            }
+        if (appData) {
+            appTitle.innerText = appData.title;
+            appContent.innerHTML = appData.content;
+            appOverlay.classList.remove('hidden');
         }
-        this.updateDisplay();
-    }
+    });
+});
 
-    handleAction(action) {
-        switch (action) {
-            case 'ac':
-                this.clearAll();
-                break;
-            case 'delete':
-                this.deleteDigit();
-                break;
-            case 'plus-minus':
-                this.toggleSign();
-                break;
-            case 'percent':
-                this.calculatePercent();
-                break;
-            case 'decimal':
-                this.appendDecimal();
-                break;
-            case 'equals':
-                this.calculate();
-                break;
-        }
-    }
+backButton.addEventListener('click', () => {
+    appOverlay.classList.add('hidden');
+});
 
-    clearAll() {
-        this.currentInput = '0';
-        this.previousInput = null;
-        this.operator = null;
-        this.waitingForNewNumber = false;
-        this.updateDisplay();
-    }
-
-    deleteDigit() {
-        if (this.waitingForNewNumber) return;
-        this.currentInput = this.currentInput.length > 1 
-            ? this.currentInput.slice(0, -1) 
-            : '0';
-        this.updateDisplay();
-    }
-
-    toggleSign() {
-        const value = parseFloat(this.currentInput);
-        if (value === 0) return;
-        this.currentInput = String(value * -1);
-        this.updateDisplay();
-    }
-
-    appendDecimal() {
-        if (this.waitingForNewNumber) return;
-        
-        // Check if decimal already exists in current input
-        if (this.currentInput.includes('.')) return;
-        
-        // If we have an operator pending, start fresh with "0."
-        if (this.operator && this.previousInput !== null) {
-            this.currentInput = '0.';
-            this.waitingForNewNumber = true;
-        } else {
-            this.currentInput += '.';
-        }
-        this.updateDisplay();
-    }
-
-    setOperator(op) {
-        if (this.operator && !this.waitingForNewNumber) {
-            this.calculate();
-        }
-        
-        this.previousInput = parseFloat(this.currentInput);
-        this.operator = op;
-        this.waitingForNewNumber = true;
-        
-        // Highlight the operator button
-        document.querySelectorAll('[data-operator]').forEach(btn => {
-            btn.classList.remove('orange');
-        });
-        const activeBtn = document.querySelector(`[data-operator="${op}"]`);
-        if (activeBtn) activeBtn.classList.add('orange');
-    }
-
-    calculate() {
-        if (!this.operator || this.previousInput === null) return;
-        
-        const current = parseFloat(this.currentInput);
-        let result;
-
-        switch (this.operator) {
-            case '+':
-                result = this.previousInput + current;
-                break;
-            case '-':
-                result = this.previousInput - current;
-                break;
-            case '*':
-                result = this.previousInput * current;
-                break;
-            case '/':
-                result = current === 0 ? 'NaN' : this.previousInput / current;
-                break;
-        }
-
-        // Fix floating point precision issues (e.g., 0.1 + 0.2)
-        if (result !== 'NaN') {
-            result = parseFloat(result.toFixed(8));
-        }
-
-        this.currentInput = String(result);
-        this.previousInput = null;
-        this.operator = null;
-        this.waitingForNewNumber = true;
-        
-        // Clear operator highlighting
-        document.querySelectorAll('[data-operator]').forEach(btn => {
-            btn.classList.remove('orange');
-        });
-
-        this.updateDisplay();
-    }
-
-    calculatePercent() {
-        const value = parseFloat(this.currentInput);
-        if (isNaN(value)) return;
-        this.currentInput = String(value / 100);
-        this.updateDisplay();
-    }
-
-    updateDisplay() {
-        // Dynamic font sizing based on length
-        let fontSize = '52px';
-        const len = this.currentInput.length;
-        
-        if (len > 9) fontSize = '36px';
-        else if (len > 7) fontSize = '40px';
-        else if (len > 5) fontSize = '48px';
-
-        this.display.textContent = this.currentInput;
-        this.display.style.fontSize = fontSize;
-    }
+// Update time every second
+function updateTime() {
+    const now = new Date();
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    document.getElementById('current-time').innerText = hours + ':' + minutes;
 }
 
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-    window.calc = new Calculator();
-});
+setInterval(updateTime, 1000);
+updateTime();
